@@ -156,7 +156,13 @@ function renderList() {
     row.append(mag, place, textElement('span', 'row-depth', `${event.depth.toFixed(1)} km`),
       textElement('span', 'row-age', timeAgo(event.time)), textElement('span', 'row-arrow', '↗'));
     row.setAttribute('aria-label', `Explore magnitude ${event.magnitude.toFixed(1)}, ${event.place}, ${utcTime(event.time)}, depth ${event.depth.toFixed(1)} kilometres`);
-    row.addEventListener('click', () => selectEvent(event.id));
+    row.addEventListener('click', () => {
+      selectEvent(event.id);
+      // The detail panel sits above the log, so bring the selected story into view.
+      const heading = $('detail-heading');
+      heading.focus({ preventScroll: true });
+      heading.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    });
     fragment.append(row);
   }
   $('event-list').replaceChildren(fragment);

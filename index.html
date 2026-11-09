@@ -54,7 +54,7 @@
         </div>
 
         <aside class="event-panel" aria-labelledby="detail-heading">
-          <div class="panel-top"><h2 id="detail-heading">A closer look</h2><span id="event-index">SELECT AN EVENT</span></div>
+          <div class="panel-top"><h2 id="detail-heading" tabindex="-1">A closer look</h2><span id="event-index">SELECT AN EVENT</span></div>
           <div class="event-orbit" id="event-orbit" aria-hidden="true"><i></i><i></i><i></i><span id="detail-mag-art">—</span></div>
           <p class="event-kicker" id="detail-type">WAITING FOR DATA</p><h3 id="detail-place">Every pulse has a place.</h3><p class="event-time" id="detail-time">Select an earthquake to explore its details.</p>
           <dl class="event-facts"><div><dt>Magnitude</dt><dd id="detail-mag">—</dd></div><div><dt>Depth</dt><dd id="detail-depth">—</dd></div><div><dt>Coordinates</dt><dd id="detail-coords">—</dd></div><div><dt>Review status</dt><dd id="detail-review">—</dd></div></dl>
@@ -73,7 +73,7 @@
         </div>
         <div class="list-heading" aria-hidden="true"><span>MAGNITUDE</span><span>LOCATION / EVENT</span><span>DEPTH</span><span>WHEN</span><span></span></div>
         <div id="event-list" class="event-list" aria-label="Earthquake events"></div>
-        <div class="list-footer"><p id="list-summary">Waiting for the USGS feed.</p><button id="load-more" type="button" class="button" hidden>Show more events</button></div>
+        <div class="list-footer"><p id="list-summary" role="status" aria-live="polite">Waiting for the USGS feed.</p><button id="load-more" type="button" class="button" hidden>Show more events</button></div>
       </section>
     </section>
 
