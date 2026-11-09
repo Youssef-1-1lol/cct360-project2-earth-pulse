@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the Earth's recent movement through a live, interactive earthquake atlas powered by USGS data.">
+  <title>Earth Pulse — a living seismic atlas</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#explorer">Skip to earthquake explorer</a>
+  <header class="site-header">
+    <a href="./" class="brand" aria-label="Earth Pulse home"><span class="brand-icon" aria-hidden="true">◎</span> EARTH<span>PULSE</span></a>
+    <nav aria-label="Main navigation"><a href="#explorer">Live atlas</a><a href="#how-it-works">Behind the pulse <span aria-hidden="true">↗</span></a></nav>
+    <span class="header-note">AN EXPLORATION OF A MOVING PLANET</span>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div><p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> A LIVING SEISMIC ATLAS</p><h1 id="page-title">The ground beneath us<br>is never <em>still.</em></h1></div>
+      <div class="hero-aside"><span class="issue-number">01 / EARTH IN MOTION</span><p>Small tremors. Distant shifts.<br>A closer look at the planet’s recent movement, one pulse at a time.</p><a class="text-link" href="#explorer">Explore the latest activity <span aria-hidden="true">↓</span></a></div>
+    </section>
+
+    <section id="explorer" class="explorer" aria-label="Live earthquake explorer">
+      <div class="toolbar">
+        <div class="period-control"><label for="period">OBSERVATION WINDOW</label><select id="period"><option value="day">Past 24 hours</option><option value="week">Past 7 days</option></select></div>
+        <div class="toolbar-right"><span class="feed-state" id="feed-state">CONNECTING TO USGS</span><button type="button" id="refresh" class="button"><span aria-hidden="true">↻</span> Refresh data</button></div>
+      </div>
+
+      <div class="atlas-layout">
+        <div class="map-column">
+          <div class="map-heading"><div><h2>Movement, mapped.</h2><p>Choose a pulse or an event below to see its story.</p></div><span class="map-index">GLOBAL VIEW / 180°W–180°E</span></div>
+          <div id="map-shell" class="map-shell" aria-busy="true">
+            <svg id="map" viewBox="0 0 1000 500" role="group" aria-label="Earthquake locations on a world map">
+              <title>Recent earthquakes around the world</title>
+              <defs><pattern id="grid" width="83.3333" height="83.3333" patternUnits="userSpaceOnUse"><path d="M 83.3333 0 L 0 0 0 83.3333" fill="none" stroke="#cfdad0" stroke-width=".7"/></pattern></defs>
+              <rect width="1000" height="500" fill="url(#grid)"/>
+              <image href="assets/world.svg" width="1000" height="500" aria-hidden="true"/>
+              <path d="M0 250H1000" class="equator"/>
+              <text x="9" y="244" class="map-coordinate" aria-hidden="true">0° / EQUATOR</text>
+              <g id="markers"></g>
+            </svg>
+            <div id="map-message" class="map-message">Listening for the latest activity…</div>
+          </div>
+          <div class="map-legend"><span><i class="legend-dot shallow"></i> Shallow &lt;70 km</span><span><i class="legend-dot middle"></i> 70–300 km</span><span><i class="legend-dot deep"></i> Deep &gt;300 km</span><span class="legend-size">Larger circle = greater magnitude</span></div>
+          <div class="map-foot"><p id="status" role="status" aria-live="polite">Loading live earthquake data…</p><button type="button" id="motion" class="motion-button" aria-pressed="false">Pause pulses</button></div>
+          <div class="stat-strip" aria-label="Summary of filtered earthquake events">
+            <div><span class="stat-label">EVENTS IN VIEW</span><strong id="event-count">—</strong></div>
+            <div><span class="stat-label">LARGEST MAGNITUDE</span><strong id="max-mag">—</strong></div>
+            <div><span class="stat-label">LATEST EVENT</span><strong id="latest-age">—</strong></div>
+          </div>
+        </div>
+
+        <aside class="event-panel" aria-labelledby="detail-heading">
+          <div class="panel-top"><h2 id="detail-heading">A closer look</h2><span id="event-index">SELECT AN EVENT</span></div>
+          <div class="event-orbit" id="event-orbit" aria-hidden="true"><i></i><i></i><i></i><span id="detail-mag-art">—</span></div>
+          <p class="event-kicker" id="detail-type">WAITING FOR DATA</p><h3 id="detail-place">Every pulse has a place.</h3><p class="event-time" id="detail-time">Select an earthquake to explore its details.</p>
+          <dl class="event-facts"><div><dt>Magnitude</dt><dd id="detail-mag">—</dd></div><div><dt>Depth</dt><dd id="detail-depth">—</dd></div><div><dt>Coordinates</dt><dd id="detail-coords">—</dd></div><div><dt>Review status</dt><dd id="detail-review">—</dd></div></dl>
+          <a id="event-link" class="event-link" hidden target="_blank" rel="noopener noreferrer">Open event on USGS <span aria-hidden="true">↗</span></a>
+          <p class="detail-note">Pulses are an artistic interpretation of event data—not measured seismic waves or an alert system.</p>
+        </aside>
+      </div>
+
+      <section class="event-browser" aria-labelledby="events-heading">
+        <div class="browser-heading"><div><p class="eyebrow">FOLLOW THE MOVEMENT</p><h2 id="events-heading">The event log.</h2></div><p>Filter the noise.<br>Find a movement that catches your eye.</p></div>
+        <div class="filters">
+          <div class="magnitude-control"><label for="magnitude">MINIMUM MAGNITUDE <output id="magnitude-value" for="magnitude">2.5</output></label><input id="magnitude" type="range" min="2.5" max="6" value="2.5" step="0.5" aria-valuetext="Magnitude 2.5 and above"></div>
+          <div><label for="search">FIND A PLACE</label><input id="search" type="search" placeholder="Try Alaska, Japan…" autocomplete="off"></div>
+          <div><label for="sort">ORDER BY</label><select id="sort"><option value="recent">Most recent</option><option value="strongest">Largest magnitude</option><option value="deepest">Deepest</option></select></div>
+          <button type="button" id="reset" class="button">Reset filters</button>
+        </div>
+        <div class="list-heading" aria-hidden="true"><span>MAGNITUDE</span><span>LOCATION / EVENT</span><span>DEPTH</span><span>WHEN</span><span></span></div>
+        <div id="event-list" class="event-list" aria-label="Earthquake events"></div>
+        <div class="list-footer"><p id="list-summary">Waiting for the USGS feed.</p><button id="load-more" type="button" class="button" hidden>Show more events</button></div>
+      </section>
+    </section>
+
+    <section id="how-it-works" class="explanation" aria-labelledby="how-heading">
+      <div><p class="eyebrow">BEHIND THE PULSE</p><h2 id="how-heading">Real data.<br>A different perspective.</h2><p>Earth Pulse turns a catalogue of recent earthquakes into something you can explore. Every point starts with a real event in the USGS feed.</p></div>
+      <div class="encoding-grid"><article><span>01 / SCALE</span><h3>Magnitude becomes size.</h3><p>Larger magnitudes draw larger circles. Ring size is an illustrative scale, not a measure of shaking or damage.</p></article><article><span>02 / COLOUR</span><h3>Depth sets the tone.</h3><p>Orange marks events shallower than 70 km, green marks 70–300 km, and blue marks events deeper than 300 km.</p></article><article><span>03 / TIME</span><h3>Freshness leaves a trace.</h3><p>Recent events appear more opaque. The selected event has its own pulse speed, shaped by its magnitude.</p></article><article><span>04 / CONTEXT</span><h3>Look beyond the dots.</h3><p>This shows earthquakes of magnitude 2.5+ reported by USGS, not every earthquake worldwide. Data can be revised; small events are detected unevenly.</p></article></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-brand">EARTH PULSE <span>DATA IN MOTION / CCT360 PROJECT 2</span></div><p>Earthquake data: <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener noreferrer">USGS</a> · Base map: <a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank" rel="noopener noreferrer">Natural Earth</a> (public domain).<br>Refreshes every 60 seconds while visible. All event times shown in UTC.</p></footer>
+  <noscript><p class="noscript">Enable JavaScript to load the live earthquake explorer.</p></noscript>
+</body>
+</html>
